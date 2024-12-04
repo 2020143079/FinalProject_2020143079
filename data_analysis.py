@@ -84,7 +84,7 @@ def main(file_path):
     # 데이터 로드
     data = load_data(file_path)
     
-    # Trust -> RnD_ratio (다중회귀분석)
+    # Trust -> RnD Investment/GDP (다중회귀분석)
     print("\n--- Trust -> RnD_ratio ---")
     X = data[['Scientist', 'Government', 'Gross_tertiary_education_enrollment']]
     y = data['RnD_ratio']
@@ -94,17 +94,17 @@ def main(file_path):
     # 이상치 탐지 및 제거
     data_cleaned = remove_outliers(data, model_rnd_ratio.resid)
 
-    # Trust -> RnD_ratio (클린 데이터 사용)
+    # Trust -> RnD Investment/GDP (클린 데이터 사용)
     print("\n--- Trust -> RnD_ratio (Cleaned Data) ---")
     X_cleaned = data_cleaned[['Scientist', 'Government', 'Gross_tertiary_education_enrollment']]
     y_cleaned = data_cleaned['RnD_ratio']
     model_rnd_ratio_cleaned = run_ols_regression(X_cleaned, y_cleaned)
     plot_actual_vs_predicted(X_cleaned, y_cleaned, model_rnd_ratio_cleaned, title="Actual vs Predicted (Trust -> RnD_ratio)")
 
-    # RnD_ratio -> Innovation (다중회귀분석)
-    print("\n--- RnD_ratio -> Innovation ---")
+    # RnD_ratio -> Innovation (overall index) (다중회귀분석)
+    print("\n--- RnD_ratio -> Innovation (overall index) ---")
     X_innovation = data_cleaned[['RnD_ratio', 'Gross_tertiary_education_enrollment']]
-    y_innovation = data_cleaned['Overall_Index']
+    y_innovation = data_cleaned['Innovation_overall_index']
     model_innovation = run_ols_regression(X_innovation, y_innovation)
     plot_residual_analysis(model_innovation, '(RnD_ratio -> Innovation)')
     plot_actual_vs_predicted(X_innovation, y_innovation, model_innovation, title="Actual vs Predicted (RnD_ratio -> Innovation)")

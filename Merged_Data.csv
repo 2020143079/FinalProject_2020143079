@@ -1,4 +1,4 @@
-Country,Government,Scientist,RnD_ratio,Access_Finance,Overall_Index,Research_Development,Gross_tertiary_education_enrollment
+Country,Government,Scientist,RnD_ratio,Access_Finance,Innovation_overall_index,Research_Development,Gross_tertiary_education_enrollment
 Albania,43.57,49.19,0.120845,60.75,43.23,13.33,55
 Algeria,64.98,84.42,0.2590179,55.08,40.54,32.96,51.4
 Argentina,43.52,89.37,0.5052292,45.34,56,35.46,90
