@@ -35,7 +35,7 @@ def plot_residual_analysis(model,title):
     # 잔차 분포 (히스토그램 & QQ Plot)
     plt.figure(figsize=(8, 6))
     sns.histplot(residuals, kde=True, bins=30)
-    plt.title('Distribution of '+ title)
+    plt.title('Distribution of residuals'+ title)
     plt.xlabel('Residuals')
     plt.ylabel('Density')
     plt.show()
@@ -84,38 +84,55 @@ def main(file_path):
     # 데이터 로드
     data = load_data(file_path)
     
-    # Trust -> RnD Investment/GDP (다중회귀분석)
-    print("\n--- Trust -> RnD_ratio ---")
+    # Trust -> R&D/GDP (다중회귀분석)
+    print("\n--- Trust -> R&D/GDP ---")
     X = data[['Scientist', 'Government', 'Gross_tertiary_education_enrollment']]
     y = data['RnD_ratio']
     model_rnd_ratio = run_ols_regression(X, y)
-    plot_residual_analysis(model_rnd_ratio, '(Trust -> RnD_ratio)')
+    plot_residual_analysis(model_rnd_ratio, '(Trust -> R&D/GDP)')
 
     # 이상치 탐지 및 제거
     data_cleaned = remove_outliers(data, model_rnd_ratio.resid)
 
     # Trust -> RnD Investment/GDP (클린 데이터 사용)
-    print("\n--- Trust -> RnD_ratio (Cleaned Data) ---")
+    print("\n--- Trust -> R&D/GDP (Cleaned Data) ---")
     X_cleaned = data_cleaned[['Scientist', 'Government', 'Gross_tertiary_education_enrollment']]
     y_cleaned = data_cleaned['RnD_ratio']
     model_rnd_ratio_cleaned = run_ols_regression(X_cleaned, y_cleaned)
-    plot_actual_vs_predicted(X_cleaned, y_cleaned, model_rnd_ratio_cleaned, title="Actual vs Predicted (Trust -> RnD_ratio)")
+    plot_actual_vs_predicted(X_cleaned, y_cleaned, model_rnd_ratio_cleaned, title="Actual vs Predicted (Trust -> R&D/GDP)")
 
     # RnD_ratio -> Innovation (overall index) (다중회귀분석)
-    print("\n--- RnD_ratio -> Innovation (overall index) ---")
+    print("\n--- R&D/GDP -> Innovation (overall index) ---")
     X_innovation = data_cleaned[['RnD_ratio', 'Gross_tertiary_education_enrollment']]
     y_innovation = data_cleaned['Innovation_overall_index']
     model_innovation = run_ols_regression(X_innovation, y_innovation)
-    plot_residual_analysis(model_innovation, '(RnD_ratio -> Innovation)')
-    plot_actual_vs_predicted(X_innovation, y_innovation, model_innovation, title="Actual vs Predicted (RnD_ratio -> Innovation)")
+    plot_residual_analysis(model_innovation, '(R&D/GDP -> Innovation)')
+    plot_actual_vs_predicted(X_innovation, y_innovation, model_innovation, title="Actual vs Predicted (R&D/GDP -> Innovation)")
 
     # RnD_ratio -> Research & Developement (다중회귀분석)
-    print("\n--- RnD_ratio -> Research & Developement ---")
+    print("\n--- R&D/GDP -> Research & Developement ---")
     X_RnD = data_cleaned[['RnD_ratio', 'Gross_tertiary_education_enrollment']]
     y_RnD = data_cleaned['Research_Development']
     model_rnd = run_ols_regression(X_RnD, y_RnD)
-    plot_residual_analysis(model_rnd, '(RnD_ratio -> Research & Developement)')
-    plot_actual_vs_predicted(X_RnD, y_RnD, model_innovation, title="Actual vs Predicted (RnD_ratio -> Research & Developement)")
+    plot_residual_analysis(model_rnd, '(R&D/GDP -> Research & Developement)')
+    plot_actual_vs_predicted(X_RnD, y_RnD, model_innovation, title="Actual vs Predicted (R&D/GDP -> Research & Developement)")
+
+    # Trust -> Innovation (overall index) (다중회귀분석)
+    print("\n--- Trust -> Innovation (overall index) ---")
+    X_innovation_dir = data_cleaned[['Scientist', 'Government', 'Gross_tertiary_education_enrollment']]
+    y_innovation_dir = data_cleaned['Innovation_overall_index']
+    model_innovation_dir = run_ols_regression(X_innovation_dir, y_innovation_dir)
+    plot_residual_analysis(model_innovation_dir, '(Trust -> Innovation)')
+    plot_actual_vs_predicted(X_innovation_dir, y_innovation_dir, model_innovation_dir, title="Actual vs Predicted (Trust -> Innovation)")
+
+
+    # Trust -> Research & Developement (다중회귀분석)
+    print("\n--- Trust -> Research & Developement ---")
+    X_RnD_dir = data_cleaned[['Scientist', 'Government', 'Gross_tertiary_education_enrollment']]
+    y_RnD_dir = data_cleaned['Research_Development']
+    model_RnD_dir = run_ols_regression(X_RnD_dir, y_RnD_dir)
+    plot_residual_analysis(model_RnD_dir, '(Trust -> Research & Developement)')
+    plot_actual_vs_predicted(X_RnD_dir, y_RnD_dir, model_RnD_dir, title="Actual vs Predicted (Trust -> Research & Developement)")
     
 
 # 파일 경로 설정 및 실행
